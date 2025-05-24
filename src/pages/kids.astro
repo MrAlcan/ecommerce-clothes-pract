@@ -1,0 +1,53 @@
+---
+import Layout from "@/presentation/web/layouts/shared/Layout.astro";
+import NavBar from "@/presentation/web/layouts/shared/NavBar.astro";
+import Footer from "@/presentation/web/layouts/shared/Footer.astro";
+import ProductCard from "@/presentation/web/components/products/ProductCard.astro";
+
+const imagen_saco = "./src/img/saco.jpg";
+
+const products = [
+	{name: 'Camiseta Casual Hombre', description: 'Camiseta Casual Hombre', price: 29.99, pathImg: imagen_saco},
+	{name: 'Camiseta Casual Mujer', description: 'Camiseta Casual Mujer', price: 27.99, pathImg: imagen_saco},
+	{name: 'Camiseta Casual Niño', description: 'Camiseta Casual Niño', price: 20.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Hombre', description: 'Camiseta Deportiva Hombre', price: 19.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Mujer', description: 'Camiseta Deportiva Mujer', price: 17.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Niño', description: 'Camiseta Deportiva Niño', price: 47.99, pathImg: imagen_saco},
+	
+]
+
+---
+
+<Layout title="Inicio">
+	<NavBar />
+
+	
+
+	<!-- Featured Products -->
+	<div class="bg-white">
+		<div
+			class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8"
+		>
+			<h2
+				class="text-3xl font-extrabold tracking-tight text-gray-900 text-center mb-12"
+			>
+				Productos Destacados Para Niño
+			</h2>
+
+			<div
+				class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+			>
+				{
+					products.map(({description, name, price, pathImg})=><ProductCard description={description} name={name} price={price} pathImg={pathImg} />)
+					
+				}
+			</div>
+		</div>
+	</div>
+
+	
+
+	<Footer />
+
+	
+</Layout>

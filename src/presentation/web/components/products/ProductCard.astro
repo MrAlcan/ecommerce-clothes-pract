@@ -1,0 +1,31 @@
+---
+
+interface Props{
+    pathImg: string;
+    description: string;
+    name: string;
+    price: number;
+}
+
+const {pathImg, description, name, price} = Astro.props;
+
+---
+
+<div class="group">
+    <div
+        class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8"
+    >
+        <img
+            src={pathImg}
+            alt={description}
+            class="w-full h-full object-center object-cover group-hover:opacity-75"
+        />
+    </div>
+    <h3 class="mt-4 text-sm text-gray-700">{name}</h3>
+    <p class="mt-1 text-lg font-medium text-gray-900">${price}</p>
+    <button
+        class="mt-2 w-full bg-picton-blue-500 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-sm font-medium text-white hover:bg-picton-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-picton-blue-500"
+    >
+        Añadir al carrito
+    </button>
+</div>

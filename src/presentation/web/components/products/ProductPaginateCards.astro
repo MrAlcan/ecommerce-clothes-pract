@@ -1,0 +1,51 @@
+---
+import { actions } from "astro:actions";
+
+interface Props {
+    page: number;
+    perPage: string;
+}
+
+const { page, perPage } = Astro.props;
+
+//const numberPages = await Astro.callAction(actions.getSizeProducts, {});
+
+//const { numberPage } = numeros
+
+const formData = new FormData();
+formData.append("page", page.toString());
+formData.append("perPage", perPage);
+
+const { data, error } = await Astro.callAction(
+    actions.getProductPerPage,
+    formData,
+);
+
+if (!data) {
+    throw new Error("Sin datos");
+}
+
+const numberPages = 25;
+
+import images from "@/presentation/assets/img/saco.jpg";
+import ProductCard from "./ProductCard.astro";
+//import type { ProductEntity } from "@/domain/entities/product.entity";
+const imagen_saco = images.src;
+
+//const page = 1
+---
+
+<div
+    class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 p-10"
+>
+    {
+        data.map((p) => (
+            <ProductCard
+                description={p.category}
+                name={p.name}
+                pathImg={imagen_saco}
+                price={+p.price}
+            />
+        ))
+    }
+</div>

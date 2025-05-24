@@ -1,0 +1,143 @@
+---
+import ShoppingCart from "../../components/cart/ShoppingCart.astro";
+import NavLink from "../../components/navs/NavLink.astro";
+
+const links = [
+    { href: "/", text: "Inicio" },
+    { href: "/sections/man", text: "Hombres" },
+    { href: "/sections/women", text: "Mujeres" },
+    { href: "/sections/kids", text: "Niños" },
+    { href: "/offers", text: "Ofertas" },
+];
+---
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center">
+                <a href="/" class="flex-shrink-0 flex items-center">
+                    <span class="text-picton-blue-600 text-2xl font-bold"
+                        >ModaStyle</span
+                    >
+                </a>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    {
+                        links.map(({ href, text }) => (
+                            <NavLink href={href} text={text} type="desktop" />
+                        ))
+                    }
+                    <li id="logout" class="font-semibold text-gray-700">
+                        <a href="#">Salir</a>
+                    </li>
+                    <!--NavLink href="/" text="Inicio" type="desktop" />
+                    <NavLink href="/man" text="Hombres" type="desktop" />
+                    <NavLink href="/women" text="Mujeres" type="desktop" />
+                    <NavLink href="/kids" text="Niños" type="desktop" />
+                    <NavLink href="/offers" text="Ofertas" type="desktop" /-->
+                </div>
+            </div>
+            <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
+                <a
+                    href="/auth/login"
+                    class="px-4 py-2 text-sm font-medium text-picton-blue-600 hover:text-picton-blue-800"
+                >
+                    Ingresar
+                </a>
+                <a
+                    href="/auth/register"
+                    class="px-4 py-2 text-sm font-medium text-white bg-picton-blue-500 rounded-md hover:bg-picton-blue-600"
+                >
+                    Registrarse
+                </a>
+            </div>
+            <ShoppingCart />
+            <div class="-mr-2 flex items-center sm:hidden">
+                <button
+                    type="button"
+                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-picton-blue-500"
+                    aria-expanded="false"
+                >
+                    <span class="sr-only">Abrir menú principal</span>
+                    <!-- Heroicon name: outline/menu -->
+                    <svg
+                        class="h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile menu, show/hide based on menu state. -->
+    <div class="sm:hidden" id="mobile-menu">
+        <div class="pt-2 pb-3 space-y-1">
+            {
+                links.map(({ href, text }) => (
+                    <NavLink href={href} text={text} type="mobile" />
+                ))
+            }
+
+            <!--NavLink href="/" text="Inicio" type="mobile" />
+            <NavLink href="/man" text="Hombres" type="mobile" />
+            <NavLink href="/women" text="Mujeres" type="mobile" />
+            <NavLink href="/kids" text="Niños" type="mobile" />
+            <NavLink href="/offers" text="Ofertas" type="mobile" /-->
+        </div>
+        <div class="pt-4 pb-3 border-t border-gray-200">
+            <div class="flex items-center px-4 space-x-3">
+                <a
+                    href="/auth/login"
+                    class="block px-4 py-2 text-base font-medium text-picton-blue-600 hover:text-picton-blue-800"
+                >
+                    Ingresar
+                </a>
+                <a
+                    href="/auth/register"
+                    class="block px-4 py-2 text-base font-medium text-white bg-picton-blue-500 rounded-md hover:bg-picton-blue-600"
+                >
+                    Registrarse
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<script>
+    import { actions } from "astro:actions";
+    document.addEventListener("astro:page-load", () => {
+        // Simple mobile menu toggle
+        //document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.querySelector(
+            "button[aria-expanded]",
+        ) as HTMLButtonElement;
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener("click", function () {
+                const expanded = this.getAttribute("aria-expanded") === "true";
+                const expandedString = expanded ? "false" : "true";
+                this.setAttribute("aria-expanded", expandedString);
+                mobileMenu.classList.toggle("hidden");
+            });
+        }
+        //});
+        
+
+        const logoutElem = document.querySelector("#logout") as HTMLLIElement;
+
+        logoutElem?.addEventListener("click", () => {
+            actions.logout();
+            window.location.href = "/";
+        });
+    });
+</script>

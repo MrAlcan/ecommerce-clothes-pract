@@ -1,0 +1,24 @@
+---
+interface Props {
+    text: string;
+    size?: string;
+    icon?: string;
+}
+
+const { text, size, icon } = Astro.props;
+let sizeClass = "";
+if (size === "small") {
+    sizeClass = "px-2 py-1 text-xs";
+} else if (size === "medium") {
+    sizeClass = "px-4 py-5 text-sm";
+} else {
+    sizeClass = "px-6 py-3 text-base";
+}
+---
+
+<button
+    class=`${sizeClass} font-medium rounded bg-picton-blue-100 text-picton-blue-700 hover:bg-picton-blue-200 focus:outline-none focus:ring-2 focus:ring-picton-blue-500 focus:ring-offset-2 transition-colors`
+>
+    {text}
+</button>
+

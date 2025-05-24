@@ -1,0 +1,49 @@
+---
+
+interface Props{
+    page: number,
+    perPage: number,
+}
+
+const { page, perPage } = Astro.props
+
+---
+
+<nav class="my-10">
+    <button
+        id="btn-bef"
+        class="btn"
+        type="submit"
+        name="page"
+    >
+        Anterior
+    </button>
+    <span>Página {page} de 25</span>
+    <button
+        id="btn-next"
+        class="btn"
+        type="submit"
+        name="page"
+    >
+        Siguiente
+    </button>
+</nav>
+
+
+<script>
+    
+
+    const btnNext = document.getElementById('btn-next') as HTMLButtonElement;
+
+    btnNext.addEventListener('click', async ()=>{
+        let page = await Astro.session?.get('page');
+        page = page + 1
+
+        console.log(page)
+
+        await Astro.session?.set('page', page)
+    })
+
+
+
+</script>

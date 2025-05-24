@@ -1,0 +1,120 @@
+---
+import { actions } from "astro:actions";
+
+
+//const numberPages = await Astro.callAction(actions.getSizeProducts, {});
+
+//const { numberPage } = numeros
+
+
+const formData = new FormData();
+formData.append('page', '1');
+formData.append('perPage', '5');
+
+const { data, error } = await Astro.callAction(actions.getProductPerPage, formData )
+
+if (!data){
+    throw new Error('Sin datos')
+}
+
+const numberPages = 25
+
+
+import images from "@/presentation/assets/img/saco.jpg";
+import ProductCard from "./ProductCard.astro";
+//import type { ProductEntity } from "@/domain/entities/product.entity";
+const imagen_saco = images.src;
+
+
+const page = 1
+
+---
+
+<div client:load>
+    <form id="form-paginate" is:submit={Astro.callAction(actions.getProductPerPage)}>
+        <div
+            class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+        >
+            {
+                data.map((p) => (
+                    <ProductCard description={p.category} name={p.name} pathImg={imagen_saco} price={+p.price}></ProductCard>
+                    /*<li>
+                        {p.name} — ${p.price}
+                    </li>*/
+                ))
+            }
+
+        </div>
+        
+
+        <nav class="my-10">
+            <button
+                class="btn"
+                type="submit"
+                name="page"
+                value={page - 1}
+                disabled={page <= 1}
+            >
+                Anterior
+            </button>
+            <span>Página {page} de {numberPages}</span>
+            <button
+                class="btn"
+                type="submit"
+                name="page"
+                value={page + 1}
+                disabled={page >= +numberPages}
+            >
+                Siguiente
+            </button>
+        </nav>
+    </form>
+</div>
+
+<style>
+	@reference "@/presentation/assets/styles/global.css";
+
+	.btn{
+		@apply bg-blue-500 p-2 text-white rounded-md;
+	}
+
+	.disabled{
+		@apply bg-gray-600 text-gray-400;
+	}
+	
+</style>
+
+<script>
+
+    import { actions } from 'astro:actions'
+
+    document.addEventListener('astro:page-load', () => {
+        const form = document.getElementById('form-paginate') as HTMLFormElement;
+
+        form.addEventListener("submit", async(e) => {
+            e.preventDefault();
+
+            const originalFormData = new FormData(form);
+
+            const pageRaw = originalFormData.get("page") ?? '1';
+            const perPageRaw = "5";
+
+            const nuevoFormData = new FormData();
+            nuevoFormData.append("page", pageRaw.toString());
+            nuevoFormData.append("perPage", perPageRaw.toString());
+
+            const { data, error } = await actions.getProductPerPage(nuevoFormData)
+
+            if(!data) throw new Error('Sin datos')
+
+
+
+
+
+
+
+        })
+
+    })
+
+</script>

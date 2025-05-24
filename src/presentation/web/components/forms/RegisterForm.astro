@@ -1,0 +1,141 @@
+---
+const email = Astro.cookies.get('email')?.value ?? '';
+const rememberMe = !!email;
+---
+
+<form class="p-6">
+    <div class="space-y-4">
+        <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">
+                Nombres
+            </label>
+            <input
+                id="name"
+                name="name"
+                type="text"
+                class="mt-1 block w-full rounded-md border border-[#bde0ff] bg-[#f5faff] px-3 py-2 text-gray-700 shadow-sm focus:border-[#3498db] focus:outline-none focus:ring-1 focus:ring-[#3498db]"
+                placeholder="Jhon Doe"
+                required
+            />
+        </div>
+
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">
+                Dirección de Correo Electrónico
+            </label>
+            <input
+                id="email"
+                name="email"
+                type="email"
+                value={ email }
+                class="mt-1 block w-full rounded-md border border-[#bde0ff] bg-[#f5faff] px-3 py-2 text-gray-700 shadow-sm focus:border-[#3498db] focus:outline-none focus:ring-1 focus:ring-[#3498db]"
+                placeholder="tu@email.com"
+                required
+            />
+        </div>
+
+        <div>
+            <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Contraseña
+            </label>
+            <div class="relative mt-1">
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    class="block w-full rounded-md border border-[#bde0ff] bg-[#f5faff] px-3 py-2 text-gray-700 shadow-sm focus:border-[#3498db] focus:outline-none focus:ring-1 focus:ring-[#3498db]"
+                    placeholder="••••••••"
+                    required
+                />
+                <button
+                    type="button"
+                    class="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-[#3498db]"
+                >
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <input
+                    id="remember_me"
+                    type="checkbox"
+                    name="remember_me"
+                    checked={ rememberMe }
+                    class="h-4 w-4 rounded border-gray-300 text-[#3498db] focus:ring-[#3498db]"
+                />
+                <label
+                    for="remember_me"
+                    class="ml-2 block text-sm text-gray-700"
+                >
+                    Recuerdame
+                </label>
+            </div>
+            <div class="text-sm">
+                <a
+                    href="/forgot-password"
+                    class="font-medium text-[#3498db] hover:text-[#2980b9]"
+                >
+                   ¿Olvidaste tu Contraseña?
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <button
+                type="submit"
+                id="btn-submit"
+                class="w-full rounded-md bg-[#3498db] px-4 py-2 text-center text-sm font-medium text-white shadow-sm transition-colors hover:bg-[#2980b9] focus:outline-none focus:ring-2 focus:ring-[#3498db] focus:ring-offset-2"
+            >
+                Registrarse
+            </button>
+        </div>
+    </div>
+
+    <div class="mt-6 text-center text-sm text-gray-600">
+        ¿Tienes una cuenta?{" "}
+        <a
+            href="/auth/login"
+            class="font-medium text-[#3498db] hover:text-[#2980b9]"
+        >
+            Ingresar
+        </a>
+    </div>
+</form>
+
+<script>
+    import { actions } from 'astro:actions';
+    import Swal from 'sweetalert2';
+
+    document.addEventListener('astro:page-load', () => {
+  
+    const form = document.querySelector('form') as HTMLFormElement;
+    const btnSubmit = document.querySelector('#btn-submit') as HTMLButtonElement;
+  
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnSubmit.setAttribute('disabled', 'disabled');
+  
+      const formData = new FormData(form);
+  
+      const { data, error } = await actions.registerUser(formData);
+        
+      if (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Credenciales no son correctas',
+          text: error.message,
+        });
+        btnSubmit.removeAttribute('disabled');
+        return;
+      }
+      const { user } = data
+      console.log({ user })
+      window.localStorage.setItem( 'user', JSON.stringify( user ) )
+      window.location.replace('/user/profile');
+    }); 
+  });
+</script>

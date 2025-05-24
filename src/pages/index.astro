@@ -1,16 +1,122 @@
 ---
+import Layout from "@/presentation/web/layouts/shared/Layout.astro";
+import NavBar from "@/presentation/web/layouts/shared/NavBar.astro";
+import Footer from "@/presentation/web/layouts/shared/Footer.astro";
+import ProductCard from "@/presentation/web/components/products/ProductCard.astro";
+import ProductCategories from "@/presentation/web/components/products/ProductCategories.astro";
+import Subscription from "@/presentation/web/components/cards/Subscription.astro";
+
+import images from "@/presentation/assets/img/saco.jpg"
+const imagen_saco = images.src;
+
+const products = [
+	{name: 'Camiseta Casual Hombre', description: 'Camiseta Casual Hombre', price: 29.99, pathImg: imagen_saco},
+	{name: 'Camiseta Casual Mujer', description: 'Camiseta Casual Mujer', price: 27.99, pathImg: imagen_saco},
+	{name: 'Camiseta Casual Niño', description: 'Camiseta Casual Niño', price: 20.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Hombre', description: 'Camiseta Deportiva Hombre', price: 19.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Mujer', description: 'Camiseta Deportiva Mujer', price: 17.99, pathImg: imagen_saco},
+	{name: 'Camiseta Deportiva Niño', description: 'Camiseta Deportiva Niño', price: 47.99, pathImg: imagen_saco},
+	
+]
+
+const categories = [
+	{name: 'Hombres', descripcion: 'Colección para hombres', text: 'Descubre nuestra colección para hombres.', pathImg: imagen_saco, href: '/man'},
+	{name: 'Mujeres', descripcion: 'Colección para mujeres', text: 'Descubre nuestra colección para mujeres.', pathImg: imagen_saco, href: '/women'},
+	{name: 'Niños', descripcion: 'Colección para niños', text: 'Descubre nuestra colección para niños.', pathImg: imagen_saco, href: '/kids'},
+]
+
 
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="Inicio">
+	<NavBar />
+
+	<!-- Hero Section -->
+	<div
+		class="relative bg-gradient-to-r from-picton-blue-500 to-picton-blue-700"
+	>
+		<div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+			<div class="text-center">
+				<h1
+					class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl"
+				>
+					<span class="block">Bienvenido a ModaStyle</span>
+					<span class="block text-picton-blue-100"
+						>Moda que define tu estilo</span
+					>
+				</h1>
+				<p
+					class="mt-6 max-w-lg mx-auto text-xl text-picton-blue-100 sm:max-w-3xl"
+				>
+					Descubre nuestra nueva colección de temporada con las
+					últimas tendencias en moda para toda la familia.
+				</p>
+				<div
+					class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center"
+				>
+					<div
+						class="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5"
+					>
+						<a
+							href="#"
+							class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-picton-blue-700 bg-white hover:bg-picton-blue-50 sm:px-8"
+						>
+							Ver Ofertas
+						</a>
+						<a
+							href="#"
+							class="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-picton-blue-900 hover:bg-picton-blue-800 sm:px-8"
+						>
+							Nueva Colección
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Featured Products -->
+	<div class="bg-white">
+		<div
+			class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8"
+		>
+			<h2
+				class="text-3xl font-extrabold tracking-tight text-gray-900 text-center mb-12"
+			>
+				Productos Destacados
+			</h2>
+
+			<div
+				class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+			>
+				{
+					products.map(({description, name, price, pathImg})=><ProductCard description={description} name={name} price={price} pathImg={pathImg} />)
+					
+				}
+			</div>
+		</div>
+	</div>
+
+	<!-- Categories Section -->
+	<div class="bg-picton-blue-50 py-16">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<h2
+				class="text-3xl font-extrabold tracking-tight text-gray-900 text-center mb-12"
+			>
+				Explora Nuestras Categorías
+			</h2>
+			<div
+				class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3"
+			>
+				{categories.map(({name, descripcion, text, pathImg, href})=><ProductCategories name={name} description={descripcion} text={text} pathImg={pathImg} href={href} />)}
+				
+			</div>
+		</div>
+	</div>
+
+	<Subscription />
+
+	<Footer />
+
+	
+</Layout>

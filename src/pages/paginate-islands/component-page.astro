@@ -1,0 +1,120 @@
+---
+import ProductPaginate from "@/presentation/web/components/products/ProductPaginate.astro";
+import ProductPaginateButtons from "@/presentation/web/components/products/ProductPaginateButtons.astro";
+import ProductPaginateCards from "@/presentation/web/components/products/ProductPaginateCards.astro";
+import Layout from "@/presentation/web/layouts/shared/Layout.astro";
+import NavBar from "@/presentation/web/layouts/shared/NavBar.astro";
+
+import { actions } from 'astro:actions'
+
+
+//const { data, error } = await Astro.callAction(actions.getProduct, {});
+/*
+if(!data){
+    throw new Error('Sin datos disponibles')
+}
+
+console.log(data);
+
+const formObject = new FormData(
+
+)
+
+const products = actions.getProductPerPage({})
+*/
+
+let page = 1
+
+
+
+await Astro.session?.set('page', page);
+
+
+
+---
+
+<Layout title="Islas Servers">
+    <NavBar />
+
+    <section class="m-10">
+        
+        <!--ProductPaginate></ProductPaginate-->
+        <div id="paginate-astro">
+
+            <ProductPaginateCards page={page} perPage="5" server:defer>
+    
+            </ProductPaginateCards>
+        </div>
+
+    </section>
+
+    <!--nav class="my-10">
+        <button
+            id="btn-bef"
+            class="btn"
+            type="submit"
+            name="page"
+            
+        >
+            Anterior
+        </button>
+        <span>Página 1 de 25</span>
+        <button
+            id="btn-next"
+            class="btn"
+            type="submit"
+            name="page"
+        >
+            Siguiente
+        </button>
+    </nav-->
+
+    <ProductPaginateButtons page={1} perPage={5}></ProductPaginateButtons>
+
+
+
+</Layout>
+<style>
+	@reference "@/presentation/assets/styles/global.css";
+
+	.btn{
+		@apply bg-blue-500 p-2 text-white rounded-md;
+	}
+
+
+
+	.disabled{
+		@apply bg-gray-600 text-gray-400;
+	}
+	
+</style>
+
+<script>
+
+
+    document.addEventListener('astro:page-load', ()=>{
+        localStorage.setItem('page', '1')
+
+        const btnNext = document.getElementById('btn-next') as HTMLButtonElement;
+        const btnBefore = document.getElementById('btn-bef') as HTMLButtonElement;
+        const componentList = document.getElementById('paginate-astro') as HTMLDivElement;
+
+        console.log(btnNext)
+        console.log(btnBefore)
+        console.log(componentList)
+
+        btnNext.addEventListener('click', ()=>{
+            componentList.innerHTML = ''
+            const componentPaginate = document.createElement('ProductPaginateCards');
+
+            componentPaginate.setAttribute('page', '2');
+            componentPaginate.setAttribute('perPage', '5');
+
+            componentList.appendChild(componentPaginate);
+
+        })
+
+
+    });
+
+</script>

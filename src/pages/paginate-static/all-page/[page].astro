@@ -1,0 +1,126 @@
+---
+import type { GetStaticPaths } from "astro";
+import { actions } from 'astro:actions';
+
+import Layout from "@/presentation/web/layouts/shared/Layout.astro";
+import NavBar from "@/presentation/web/layouts/shared/NavBar.astro";
+import { prisma } from "@/lib/prisma";
+import ProductCard from "@/presentation/web/components/products/ProductCard.astro";
+
+
+
+export const prerender = true
+
+//const {data, error} = await Astro.callAction( actions.getProduct, {} )
+//console.log(data);
+
+export const getStaticPaths = (async ({paginate})=>{ //: Promise<{ params: { id: string }; props: { product: ProductEntity } }[]> => {
+  
+    const { data } = await actions.getProduct();
+
+    //const results = await prisma.product.findMany()
+    //
+    
+    console.log(results)
+
+    if (!data) {
+        throw new Error('No data retured from getProducts');
+    }
+
+    /*return results.map(({name, id})=>({
+        params: {id: id},
+        props: {name: name},
+    }))*/
+
+    return paginate(results, {pageSize: 5});
+
+
+    /*return [
+        {
+            params: {id: 1},
+            props: { name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"}
+        },
+        {
+            params: {id: 2},
+            props: { name: "charmander", url: "https://pokeapi.co/api/v2/pokemon/4/"}
+        },
+        
+    ];*/
+
+
+  
+}) satisfies GetStaticPaths;
+
+const {page} = Astro.props;
+import images from "@/presentation/assets/img/saco.jpg"
+import { promise } from "astro:schema";
+const imagen_saco = images.src;
+
+---
+
+<Layout title="Paginado">
+    <NavBar />
+
+    <h1>Paginado Estatico</h1>
+    <section class="m-5 p-5">
+        <div
+            class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
+        >
+            {page.data.map((product)=><ProductCard description={product.category} name={product.name} pathImg={imagen_saco} price={+product.price}></ProductCard>)}
+            <!--ProductCard description="" name="" pathImg={imagen_saco} price={29.9}></ProductCard-->
+        </div>
+
+    </section>
+
+    <section class="flex mt-10 gap-2 items-center mx-10">
+
+		{
+			/*page.url.prev && (
+				<a class="btn" href={page.url.prev}>Anteriores</a>
+			)*/
+		}
+
+		<a
+			href={page.url.prev}
+			class:list={[
+				`btn`,
+				{
+					disabled: !page.url.prev,
+				}
+			]}
+		>Anteriores</a>
+
+		
+
+
+		<a
+			href={page.url.next}
+			class:list={[
+				`btn`,
+				{
+					disabled: !page.url.next,
+				}
+			]}
+		>Siguientes</a>
+
+		<div class="flex flex-1"></div>
+
+		<span class="text-xl font-bold">Página {page.currentPage}</span>
+	</section>
+
+
+
+</Layout>
+
+<style>
+	@reference "@/presentation/assets/styles/global.css";
+
+	.btn{
+		@apply bg-blue-500 p-2 text-white rounded-md;
+	}
+
+	.disabled{
+		@apply bg-gray-600 text-gray-400;
+	}
+	
+</style>

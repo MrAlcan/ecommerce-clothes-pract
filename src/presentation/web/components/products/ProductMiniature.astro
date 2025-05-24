@@ -1,0 +1,17 @@
+---
+
+interface Props{
+    pathImg: string;
+}
+
+const { pathImg } = Astro.props;
+const changeImg = `${pathImg}?height=600&width=600`
+
+---
+<!--onclick="changeImage(`${changeImg}`, this)" -->
+<div
+    class="thumbnail" 
+    data-img-src={changeImg}
+>
+    <img src={ pathImg } alt="Vista frontal" class="w-full h-auto rounded-md" />
+</div>
