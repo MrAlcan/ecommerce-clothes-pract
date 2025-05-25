@@ -12,9 +12,25 @@ const { page, perPage } = Astro.props;
 
 //const { numberPage } = numeros
 
+
+/*const {  } = Astro.cookies.get('page') ?? '1'*/
+const cookiesHeader = Astro.request.headers.get('cookie') || '';
+const cookies = Object.fromEntries(
+  cookiesHeader.split('; ').map(cookie => {
+    const [name, ...rest] = cookie.split('=');
+    return [name, decodeURIComponent(rest.join('='))];
+  })
+);
+
+const pageCookie = cookies['page'] ?? '1';
+
+console.log(pageCookie)
+
 const formData = new FormData();
-formData.append("page", page.toString());
+formData.append("page", pageCookie.toString());
 formData.append("perPage", perPage);
+
+console.log(formData);
 
 const { data, error } = await Astro.callAction(
     actions.getProductPerPage,

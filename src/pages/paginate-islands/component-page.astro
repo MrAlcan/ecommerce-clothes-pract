@@ -39,7 +39,7 @@ await Astro.session?.set('page', page);
     <section class="m-10">
         
         <!--ProductPaginate></ProductPaginate-->
-        <div id="paginate-astro">
+        <div id="paginate-astro" class="m-20 p-20">
 
             <ProductPaginateCards page={page} perPage="5" server:defer>
     
@@ -48,7 +48,7 @@ await Astro.session?.set('page', page);
 
     </section>
 
-    <!--nav class="my-10">
+    <nav class="my-10">
         <button
             id="btn-bef"
             class="btn"
@@ -67,9 +67,11 @@ await Astro.session?.set('page', page);
         >
             Siguiente
         </button>
-    </nav-->
+    </nav>
 
-    <ProductPaginateButtons page={1} perPage={5}></ProductPaginateButtons>
+    <!--ProductPaginateButtons page={1} perPage={5}></ProductPaginateButtons-->
+
+    
 
 
 
@@ -91,6 +93,37 @@ await Astro.session?.set('page', page);
 
 <script>
 
+    //import ProductPaginate from "@/presentation/web/components/products/ProductPaginate.astro";
+    //import ProductPaginateCards from "@/presentation/web/components/products/ProductPaginateCards.astro";
+
+    import { navigate } from 'astro:transitions/client'
+
+    function setCookie(name: string, value: string, days: number) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Tiempo en milisegundos
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name: string) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim();
+            if (c.indexOf(nameEQ) === 0) {
+                return c.substring(nameEQ.length);
+            }
+        }
+
+        return null; // No se encontró la cookie
+    }
+
+
+    //import { P } from '@/presentation/web/components/products/ProductPaginate.astro'
+
+
+
 
     document.addEventListener('astro:page-load', ()=>{
         localStorage.setItem('page', '1')
@@ -99,18 +132,69 @@ await Astro.session?.set('page', page);
         const btnBefore = document.getElementById('btn-bef') as HTMLButtonElement;
         const componentList = document.getElementById('paginate-astro') as HTMLDivElement;
 
-        console.log(btnNext)
+        /*console.log(btnNext)
         console.log(btnBefore)
         console.log(componentList)
 
+        const html = ProductPaginateCards
+
+        console.log(html)*/
+
+        //const {} = ProductPaginateCards.render({})
+
         btnNext.addEventListener('click', ()=>{
-            componentList.innerHTML = ''
-            const componentPaginate = document.createElement('ProductPaginateCards');
+            //componentList.innerHTML = ''
+            //const componentPaginate = document.createElement('ProductPaginateCards');
 
-            componentPaginate.setAttribute('page', '2');
-            componentPaginate.setAttribute('perPage', '5');
+            //componentPaginate.setAttribute('page', '2');
+            //componentPaginate.setAttribute('perPage', '5');
 
-            componentList.appendChild(componentPaginate);
+            //componentList.appendChild(componentPaginate);
+
+            //let numberPage = Astro.cookies.get('page') ?? '1';
+            //let newPage = +numberPage + 1;
+
+            let cookiePage = getCookie('page');
+            let numberPage = 1
+            if(!cookiePage){
+                numberPage = 1
+            }else{
+                numberPage = +cookiePage + 1
+            }
+
+            setCookie('page', numberPage.toString(), 1)
+
+            navigate(window.location.pathname)
+
+            //Astro.cookies.set('page', newPage.toString())
+
+        })
+
+        btnBefore.addEventListener('click', ()=>{
+            //componentList.innerHTML = ''
+            //const componentPaginate = document.createElement('ProductPaginateCards');
+
+            //componentPaginate.setAttribute('page', '2');
+            //componentPaginate.setAttribute('perPage', '5');
+
+            //componentList.appendChild(componentPaginate);
+
+            //let numberPage = Astro.cookies.get('page') ?? '1';
+            //let newPage = +numberPage + 1;
+
+            let cookiePage = getCookie('page');
+            let numberPage = 1
+            if(!cookiePage){
+                numberPage = 1
+            }else{
+                numberPage = +cookiePage - 1
+            }
+
+            setCookie('page', numberPage.toString(), 1)
+
+            navigate(window.location.pathname)
+
+            //Astro.cookies.set('page', newPage.toString())
 
         })
 

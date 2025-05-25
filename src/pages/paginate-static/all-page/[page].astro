@@ -16,23 +16,27 @@ export const prerender = true
 
 export const getStaticPaths = (async ({paginate})=>{ //: Promise<{ params: { id: string }; props: { product: ProductEntity } }[]> => {
   
-    const { data } = await actions.getProduct();
+    //const { data } = await Astro.callAction(actions.getProduct, {})
+    //actions.getProduct();
+    const { data, error } = await Astro.callAction(actions.getProduct, {}) as { data: ProductEntity[], error: any };
 
+
+    console.log(data);
     //const results = await prisma.product.findMany()
     //
     
-    console.log(results)
+    //console.log(results)
 
-    if (!data) {
+    /*if (!data) {
         throw new Error('No data retured from getProducts');
-    }
+    }*/
 
     /*return results.map(({name, id})=>({
         params: {id: id},
         props: {name: name},
     }))*/
 
-    return paginate(results, {pageSize: 5});
+    return paginate(data, {pageSize: 5});
 
 
     /*return [
@@ -54,6 +58,7 @@ export const getStaticPaths = (async ({paginate})=>{ //: Promise<{ params: { id:
 const {page} = Astro.props;
 import images from "@/presentation/assets/img/saco.jpg"
 import { promise } from "astro:schema";
+import type { ProductEntity } from "@/domain/entities/product.entity";
 const imagen_saco = images.src;
 
 ---
