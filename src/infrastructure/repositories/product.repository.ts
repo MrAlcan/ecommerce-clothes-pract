@@ -1,9 +1,11 @@
 import type { ProductDatasource } from "@/domain/datasources/product.datasource";
-import type { NewProductDto } from "@/domain/dtos/product/newProduct.dto";
-import type { ProductDto } from "@/domain/dtos/product/product.dto";
-import type { ProductPageDto } from "@/domain/dtos/product/productPage";
+import type { NewProductDto } from "@/domain/dtos/product/new-product.dto";
+import type { GetProductsPerPageDto } from "@/domain/dtos/product/get-products-pew-page.dto";
 import type { ProductEntity } from "@/domain/entities/product.entity";
 import type { ProductRepository } from "@/domain/repositories/product.repository";
+import type { ReserveProductDto } from "@/domain/dtos/product/reserve-product.dto";
+import type { ReserveProductEntity } from "@/domain/entities/reserve-product.entity";
+import type { AddProductsToOrderDto } from "@/domain/dtos/product/add-products-to-order.dto";
 
 export class ProductRepositoryImpl implements ProductRepository{
     
@@ -15,12 +17,20 @@ export class ProductRepositoryImpl implements ProductRepository{
         return this.productDatasource.newProduct(newProductDto)
     }
 
-    product(productDto: ProductDto): Promise<ProductEntity[]> {
-        return this.productDatasource.product(productDto)
+    getAllProducts(): Promise<ProductEntity[]> {
+        return this.productDatasource.getAllProducts()
     }
 
-    productPage(productPageDto: ProductPageDto): Promise<ProductEntity[]>{
-        return this.productDatasource.productPage(productPageDto)
+    getProductsPerPage(productPageDto: GetProductsPerPageDto): Promise<ProductEntity[]>{
+        return this.productDatasource.getProductsPerPage(productPageDto)
+    }
+
+    reserveProduct(productReservedDto: ReserveProductDto): Promise<ReserveProductEntity> {
+        return this.productDatasource.reserveProduct(productReservedDto)
+    }
+
+    addProductsToOrder(addProductsToOrderDto: AddProductsToOrderDto): Promise<ReserveProductEntity[]> {
+        return this.productDatasource.addProductsToOrder(addProductsToOrderDto);
     }
 
 }

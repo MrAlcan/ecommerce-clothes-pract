@@ -31,11 +31,13 @@ const { page, perPage } = Astro.props
 
 
 <script>
+
     
 
     const btnNext = document.getElementById('btn-next') as HTMLButtonElement;
 
     btnNext.addEventListener('click', async ()=>{
+
         let page = await Astro.session?.get('page');
         page = page + 1
 

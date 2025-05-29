@@ -6,6 +6,9 @@ import Footer from "@/presentation/web/layouts/shared/Footer.astro";
 import ProductCard from "@/presentation/web/components/products/ProductCard.astro";
 
 import images from "@/presentation/assets/img/saco.jpg"
+import { actions } from "astro:actions";
+import ProductPagination from "@/presentation/web/components/products/ProductPagination.astro";
+
 const imagen_saco = images.src;
 
 const products = [
@@ -17,6 +20,8 @@ const products = [
 	{name: 'Camiseta Deportiva Niño', description: 'Camiseta Deportiva Niño', price: 47.99, pathImg: imagen_saco},
 	
 ]
+
+//export const prerender = true
 
 export const getStaticPaths = (async () => {
     return [
@@ -36,6 +41,11 @@ const pathName = Astro.url.pathname;
 
 const sectionName = pathName.split('/').at(-1);
 
+//const productsSection = Astro.callAction(actions.getProductPerPage())
+
+
+
+
 ---
 
 <Layout title="Inicio">
@@ -54,14 +64,39 @@ const sectionName = pathName.split('/').at(-1);
 				Productos Destacados Para {sectionName}
 			</h2>
 
-			<div
+			<!--div
 				class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"
 			>
 				{
 					products.map(({description, name, price, pathImg})=><ProductCard description={description} name={name} price={price} pathImg={pathImg} />)
 					
 				}
+			</div-->
+			<ProductPagination page={1} perPage="5" section={sectionName} server:defer ></ProductPagination>
+
+			<div>
+				<nav class="m-10">
+					<button
+						id="btn-bef"
+						class="btn"
+						type="submit"
+						name="page"
+						
+					>
+						Anterior
+					</button>
+					<span>Página 1 de 25</span>
+					<button
+						id="btn-next"
+						class="btn"
+						type="submit"
+						name="page"
+					>
+						Siguiente
+					</button>
+				</nav>
 			</div>
+
 		</div>
 	</div>
 
@@ -71,3 +106,104 @@ const sectionName = pathName.split('/').at(-1);
 
 	
 </Layout>
+
+<style>
+	@reference "@/presentation/assets/styles/global.css";
+
+	.btn{
+		@apply bg-blue-500 p-2 text-white rounded-md;
+	}
+
+
+
+	.disabled{
+		@apply bg-gray-600 text-gray-400;
+	}
+	
+</style>
+
+<script>
+
+	import { counterPage, counterProductsToOrder } from '@/presentation/web/stores/index'
+
+	//import { atom } from 'nanostores'
+
+    import { navigate } from 'astro:transitions/client'
+
+    function setCookie(name: string, value: string, days: number) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Tiempo en milisegundos
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name: string) {
+        const nameEQ = name + "=";
+        const cookies = document.cookie.split(';');
+
+        for (let i = 0; i < cookies.length; i++) {
+            let c = cookies[i].trim();
+            if (c.indexOf(nameEQ) === 0) {
+                return c.substring(nameEQ.length);
+            }
+        }
+
+        return null; // No se encontró la cookie
+    }
+
+	//export const counterPage = atom(1);
+
+    document.addEventListener('astro:page-load', ()=>{
+        //localStorage.setItem('page', '1')
+
+
+        const btnNext = document.getElementById('btn-next') as HTMLButtonElement;
+        const btnBefore = document.getElementById('btn-bef') as HTMLButtonElement;
+
+
+        btnNext.addEventListener('click', ()=>{
+
+			counterPage.set(counterPage.get() + 1)
+			//counterProductsToOrder.set(counterProductsToOrder.get() + 1)
+			console.log(counterPage.get())
+
+            /*let cookiePage = getCookie('page');
+            let numberPage = 1
+            if(!cookiePage){
+                numberPage = 1
+            }else{
+                numberPage = +cookiePage + 1
+            }
+
+            setCookie('page', numberPage.toString(), 1)
+
+            navigate(window.location.pathname)*/
+
+
+        })
+
+        btnBefore.addEventListener('click', ()=>{
+
+			counterPage.set(counterPage.get() - 1)
+			//counterProductsToOrder.set(counterProductsToOrder.get() - 1)
+			console.log(counterPage.get())
+
+
+            /*let cookiePage = getCookie('page');
+            let numberPage = 1
+            if(!cookiePage){
+                numberPage = 1
+            }else{
+                numberPage = +cookiePage - 1
+            }
+
+            setCookie('page', numberPage.toString(), 1)
+
+            navigate(window.location.pathname)*/
+
+        })
+
+
+    });
+
+</script>

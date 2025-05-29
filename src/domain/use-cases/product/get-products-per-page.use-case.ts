@@ -1,9 +1,9 @@
-import type { ProductPageDto } from "@/domain/dtos/product/productPage";
+import type { GetProductsPerPageDto } from "@/domain/dtos/product/get-products-pew-page.dto";
 import type { ProductEntity } from "@/domain/entities/product.entity";
 import type { ProductRepository } from "@/domain/repositories/product.repository";
 
 interface ProductPageUseCase{
-    execute(productPageDto: ProductPageDto): Promise<ProductEntity[]>;
+    execute(productPageDto: GetProductsPerPageDto): Promise<ProductEntity[]>;
 }
 
 export class ProductPage implements ProductPageUseCase{
@@ -12,8 +12,8 @@ export class ProductPage implements ProductPageUseCase{
         private readonly productRepository: ProductRepository
     ){}
 
-    async execute(productPageDto: ProductPageDto): Promise<ProductEntity[]> {
-        const productEntity = await this.productRepository.productPage(productPageDto)
+    async execute(productPageDto: GetProductsPerPageDto): Promise<ProductEntity[]> {
+        const productEntity = await this.productRepository.getProductsPerPage(productPageDto)
         return productEntity
     }
 

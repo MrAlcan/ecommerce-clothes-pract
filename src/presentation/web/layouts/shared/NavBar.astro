@@ -1,5 +1,6 @@
 ---
 import ShoppingCart from "../../components/cart/ShoppingCart.astro";
+import ShoppingCar from "@/presentation/web/components/cart/ShoppingCar.svelte"
 import NavLink from "../../components/navs/NavLink.astro";
 
 const links = [
@@ -51,7 +52,7 @@ const links = [
                     Registrarse
                 </a>
             </div>
-            <ShoppingCart />
+            <ShoppingCar client:load transition:persist />
             <div class="-mr-2 flex items-center sm:hidden">
                 <button
                     type="button"

@@ -1,4 +1,4 @@
-import type { NewProductDto } from "@/domain/dtos/product/newProduct.dto";
+import type { NewProductDto } from "@/domain/dtos/product/new-product.dto";
 import type { ProductEntity } from "@/domain/entities/product.entity";
 import type { ProductRepository } from "@/domain/repositories/product.repository";
 

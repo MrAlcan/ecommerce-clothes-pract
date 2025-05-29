@@ -1,13 +1,14 @@
 ---
 
 interface Props{
+    productId?: string,
     pathImg: string;
     description: string;
     name: string;
     price: number;
 }
 
-const {pathImg, description, name, price} = Astro.props;
+const {pathImg, description, name, price, productId} = Astro.props;
 
 ---
 
@@ -24,8 +25,131 @@ const {pathImg, description, name, price} = Astro.props;
     <h3 class="mt-4 text-sm text-gray-700">{name}</h3>
     <p class="mt-1 text-lg font-medium text-gray-900">${price}</p>
     <button
-        class="mt-2 w-full bg-picton-blue-500 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-sm font-medium text-white hover:bg-picton-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-picton-blue-500"
+        id="button-add-product"
+        class="mt-2 w-full bg-picton-blue-500 border border-transparent rounded-md py-2 px-4 flex items-center justify-center text-sm font-medium text-white hover:bg-picton-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-picton-blue-500 button-add-product"
+        data-name={ name }
+        data-price={ price }
+        data-id={ productId ?? '1' }
+        data-description={ description }
     >
         Añadir al carrito
     </button>
 </div>
+
+<script>
+
+    import { counterProductsToOrder, productList } from '@/presentation/web/stores/index';
+
+    //document.addEventListener('astro:after-swap', () => {
+        type Product = {
+            productId: string;
+            productName: string;
+            productAmount: number;
+            productPrice: string;
+            productDescription: string;
+        };
+
+        const buttonsAddProduct = document.querySelectorAll('.button-add-product') as NodeListOf<HTMLButtonElement>;
+
+            function setCookie(name: string, value: string, days: number) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Tiempo en milisegundos
+                const expires = "expires=" + date.toUTCString();
+                document.cookie = name + "=" + value + ";" + expires + ";path=/";
+            }
+    
+            function getCookie(name: string) {
+                const nameEQ = name + "=";
+                const cookies = document.cookie.split(';');
+    
+                for (let i = 0; i < cookies.length; i++) {
+                    let c = cookies[i].trim();
+                    if (c.indexOf(nameEQ) === 0) {
+                        return c.substring(nameEQ.length);
+                    }
+                }
+    
+                return null; // No se encontró la cookie
+            }
+        buttonsAddProduct.forEach( buttonAddProduct => {
+
+            buttonAddProduct.addEventListener('click', () => {
+                const productId = buttonAddProduct.dataset.id ?? '1';
+                const productName = buttonAddProduct.dataset.name ?? 'S/N';
+                const productPrice = buttonAddProduct.dataset.price ?? '0.00';
+                const productDescription = buttonAddProduct.dataset.description ?? 'S/N';
+                const productAmount = 1;
+                
+                console.log(' Presionando del boton de agregar al carrito ');
+    
+                const reservedProducts = getCookie('reservedProducts');
+    
+                console.log(reservedProducts);
+    
+                if( !reservedProducts ){
+                    const productSelected = [{
+                        productId,
+                        productName,
+                        productAmount,
+                        productPrice,
+                        productDescription
+                    }];
+
+                    setCookie('reservedProducts', JSON.stringify(productSelected), 1)
+
+                    counterProductsToOrder.set( 1 );
+                    productList.set( productSelected )
+    
+                } else {
+                    const arrayProducts = JSON.parse(reservedProducts) as Product[];
+    
+                    const existProduct = arrayProducts.find( product => product.productId == productId ) as Product;
+    
+                    if ( !existProduct ) {
+                        const productSelected = {
+                            productId,
+                            productName,
+                            productAmount,
+                            productPrice,
+                            productDescription
+                        };
+    
+                        arrayProducts.push(productSelected)
+    
+                        setCookie('reservedProducts', JSON.stringify(arrayProducts), 1)
+
+                        counterProductsToOrder.set( arrayProducts.length );
+
+                        productList.set( arrayProducts );
+    
+                    } else {
+    
+                        const newArrayProducts = arrayProducts.filter(product => product.productId !== productId);
+                        const productSelected = {
+                            productId,
+                            productName,
+                            productAmount: existProduct.productAmount + productAmount,
+                            productPrice,
+                            productDescription
+                        };
+    
+                        newArrayProducts.push(productSelected);
+    
+                        setCookie('reservedProducts', JSON.stringify(newArrayProducts), 1)
+                        counterProductsToOrder.set( newArrayProducts.length );
+
+                        productList.set( newArrayProducts );
+    
+                    }
+    
+                }
+    
+            });
+        } );
+
+        //const buttonAddProduct = document.getElementById('button-add-product') as HTMLButtonElement;
+
+
+
+    //});
+</script>

@@ -1,16 +1,17 @@
 
-import type { NewProductDto } from "../dtos/product/newProduct.dto";
-import type { ProductDto } from "../dtos/product/product.dto";
-import type { ProductPageDto } from "../dtos/product/productPage";
-import type { ProductReservedDto } from "../dtos/product/productReserved.dto";
+import type { NewProductDto } from "../dtos/product/new-product.dto";
+import type { GetProductsPerPageDto } from "../dtos/product/get-products-pew-page.dto";
+import type { ReserveProductDto } from "../dtos/product/reserve-product.dto";
 import type { ProductEntity } from "../entities/product.entity";
-import type { ProductReservedEntity } from "../entities/productReserver.entity";
+import type { ReserveProductEntity } from "../entities/reserve-product.entity";
+import type { AddProductsToOrderDto } from "../dtos/product/add-products-to-order.dto";
 
 export abstract class ProductRepository{
 
     abstract newProduct(newProductDto: NewProductDto): Promise<ProductEntity>;
-    abstract product(productDto: ProductDto): Promise<ProductEntity[]>;
-    abstract productPage(productPageDto: ProductPageDto): Promise<ProductEntity[]>;
-    abstract productReserved(productReservedDto: ProductReservedDto): Promise<ProductReservedEntity>
+    abstract getAllProducts(): Promise<ProductEntity[]>;
+    abstract getProductsPerPage(productPageDto: GetProductsPerPageDto): Promise<ProductEntity[]>;
+    abstract reserveProduct(productReservedDto: ReserveProductDto): Promise<ReserveProductEntity>
+    abstract addProductsToOrder(addProductsToOrderDto: AddProductsToOrderDto): Promise<ReserveProductEntity[]>
 
 }

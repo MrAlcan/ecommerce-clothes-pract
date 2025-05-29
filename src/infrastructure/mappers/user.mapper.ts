@@ -15,4 +15,8 @@ export class UserMapper{
 
         return new UserEntity(id, name, email);
     }
+
+    static userObjectFromEntity(){
+        
+    }
 }

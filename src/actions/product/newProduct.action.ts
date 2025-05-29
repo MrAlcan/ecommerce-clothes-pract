@@ -1,10 +1,10 @@
 import { defineAction, } from 'astro:actions';
 import { z } from 'astro:schema';
-import { NewProductDto } from '@/domain/dtos/product/newProduct.dto';
+import { NewProductDto } from '@/domain/dtos/product/new-product.dto';
 import { ProductDatasourceImpl } from '@/infrastructure/datasources/product.datasource.impl';
 import { ProductRepositoryImpl } from '@/infrastructure/repositories/product.repository';
 import type { ProductEntity } from '@/domain/entities/product.entity';
-import { NewProduct } from '@/domain/use-cases/product/newProduct.use-case';
+import { NewProduct } from '@/domain/use-cases/product/new-product.use-case';
 
 export const newProduct = defineAction({
     accept: 'form',

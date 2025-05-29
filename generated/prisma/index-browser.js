@@ -135,6 +135,20 @@ exports.Prisma.ProductScalarFieldEnum = {
   color: 'color'
 };
 
+exports.Prisma.OrderScalarFieldEnum = {
+  id: 'id',
+  total_price: 'total_price',
+  date: 'date'
+};
+
+exports.Prisma.ProductByOrderScalarFieldEnum = {
+  id: 'id',
+  id_order: 'id_order',
+  id_product: 'id_product',
+  amount: 'amount',
+  price: 'price'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -148,7 +162,9 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Product: 'Product'
+  Product: 'Product',
+  Order: 'Order',
+  ProductByOrder: 'ProductByOrder'
 };
 
 /**

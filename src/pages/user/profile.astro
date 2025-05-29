@@ -155,7 +155,7 @@ const { avatar, email, emailVerified, name } = user;
                     <!-- Información básica -->
                     <div class="text-center md:text-left">
                         <h1 class="text-2xl font-bold text-white">
-                            {name!.substring(0, 2)}
+                            { name }
                         </h1>
                         <p class="text-picton-blue-100">
                             {emailVerified ? 'Email verificado' : 'Email no verificado'}
@@ -304,7 +304,7 @@ const { avatar, email, emailVerified, name } = user;
                                         Nombre Completo
                                     </h4>
                                     <p class="text-sm text-gray-900">
-                                        Juan Pérez Rodríguez
+                                        { name }
                                     </p>
                                 </div>
                                 <div>
@@ -314,7 +314,7 @@ const { avatar, email, emailVerified, name } = user;
                                         Correo Electrónico
                                     </h4>
                                     <p class="text-sm text-gray-900">
-                                        juan.perez@ejemplo.com
+                                        { email }
                                     </p>
                                 </div>
                                 <div>

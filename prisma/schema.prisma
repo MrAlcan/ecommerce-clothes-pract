@@ -31,3 +31,18 @@ model Product {
   @@map("products")
 }
 
+model Order {
+  id           Int    @id @default(autoincrement())
+  total_price  String @db.VarChar
+  date         DateTime @db.Date
+  @@map("orders")
+}
+
+model ProductByOrder {
+  id           Int    @id @default(autoincrement())
+  id_order     Int    @db.Integer
+  id_product   Int    @db.Integer
+  amount       Int    @db.Integer
+  price        String @db.VarChar
+  @@map("products_by_orders")
+}

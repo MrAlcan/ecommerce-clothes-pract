@@ -1,4 +1,4 @@
-export class ProductReservedDto{
+export class ReserveProductDto{
 
     private constructor(
         public productId: number,
@@ -13,7 +13,7 @@ export class ProductReservedDto{
         if(!amount) throw new Error('Se esperaba una cantidad de Producto')
         if(amount <= 0) throw new Error('Se esperaba una cantidad mayor o igual a 0')
         
-        return new ProductReservedDto(productId, amount)
+        return new ReserveProductDto(productId, amount)
 
     }
 

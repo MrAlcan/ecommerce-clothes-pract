@@ -6,6 +6,8 @@ import ProductCard from "@/presentation/web/components/products/ProductCard.astr
 import ProductCategories from "@/presentation/web/components/products/ProductCategories.astro";
 import Subscription from "@/presentation/web/components/cards/Subscription.astro";
 
+import Modal from '@/presentation/web/components/utils/modal.svelte'
+
 import images from "@/presentation/assets/img/saco.jpg"
 const imagen_saco = images.src;
 
@@ -30,6 +32,10 @@ const categories = [
 
 <Layout title="Inicio">
 	<NavBar />
+	
+	<div id="pruebaModal">
+		<Modal textButton="sdf" client:load></Modal>
+	</div>
 
 	<!-- Hero Section -->
 	<div
